@@ -1,0 +1,72 @@
+version: '2'
+
+services:
+    mq-namesrv1:
+       container_name: mq-namesrv1
+       hostname: mq-namesrv1
+       image: 10.4.65.226/deeplearning/rocketmq:4.0.0
+       volumes:
+           - ./rocketmq/nameserver/conf/:/usr/local/apache-rocketmq-all/conf/
+           - ./rocketmq/bin/:/usr/local/apache-rocketmq-all/bin/
+           - /etc/localtime:/etc/localtime:ro
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /usr/local/apache-rocketmq-all ; bin/mqnamesrv; tail -f /dev/null"
+       ports:
+             - '9876:9876'
+       networks:
+            - hdpOverlay
+
+    mq-broker-a:
+       container_name:  mq-broker-a
+       hostname:  mq-broker-a
+       image: 10.4.65.226/deeplearning/rocketmq:4.0.0
+       volumes:
+            - ./rocketmq/broker/conf/:/usr/local/apache-rocketmq-all/conf/
+            - ./rocketmq/data-a:/usr/local/mqdata
+            - ./rocketmq/bin/:/usr/local/apache-rocketmq-all/bin/
+            - /etc/localtime:/etc/localtime:ro
+       entrypoint :
+            - "sh"
+            - "-c"
+            - "source /etc/profile; cd /usr/local/apache-rocketmq-all ; bin/mqbroker -c conf/2m-2s-async/broker-a.properties -n mq-namesrv1:9876; tail -f /dev/null"
+       networks:
+            - hdpOverlay
+
+    mq-broker-a-s:
+       container_name:  mq-broker-a-s
+       hostname:  mq-broker-a-s
+       image: 10.4.65.226/deeplearning/rocketmq:4.0.0
+       volumes:
+            - ./rocketmq/broker/conf/:/usr/local/apache-rocketmq-all/conf/
+            - ./rocketmq/data-a-s:/usr/local/mqdata
+            - ./rocketmq/bin/:/usr/local/apache-rocketmq-all/bin/
+            - /etc/localtime:/etc/localtime:ro
+       entrypoint :
+            - "sh"
+            - "-c"
+            - "source /etc/profile; cd /usr/local/apache-rocketmq-all ; bin/mqbroker -c conf/2m-2s-async/broker-a-s.properties -n mq-namesrv1:9876; tail -f /dev/null"
+       networks:
+            - hdpOverlay
+
+    mq-console:
+        container_name: mq-console
+        hostname: mq-console
+        image: 10.4.65.226/deeplearning/rocketmq-console:1.0.0
+        volumes:
+             - /etc/localtime:/etc/localtime:ro
+        entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; java -Drocketmq.namesrv.addr=mq-namesrv1:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false -jar app.jar; tail -f /dev/null"
+        ports:
+             - '8085:8080'
+        depends_on:
+             - mq-namesrv1
+        networks:
+             - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+
+  redis-master1:
+      image: 10.4.65.226/deeplearning/redis-master:3.2.9
+      container_name: redis-master1
+      hostname: redis-master1
+      volumes:
+         - ./redis/data/master:/redis-data
+      ports:
+        - "7010:7000"
+        - "7011:7001"
+        - "7012:7002"
+      depends_on:
+        - redis-slave1
+      networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.200
+
+  redis-slave1:
+      image: 10.4.65.226/deeplearning/redis-slave:3.2.9
+      container_name: redis-slave1
+      hostname: redis-slave1
+      volumes:
+         - ./redis/data/slave:/redis-data
+      ports:
+        - "7013:7003"
+        - "7014:7004"
+        - "7015:7005"
+      networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.201
+
+networks:
+  hdpOverlay:
+    external: true

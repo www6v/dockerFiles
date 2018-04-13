@@ -1,0 +1,63 @@
+{
+  "clusterName": "lenovo_image_nodes",
+  "version": 1,
+  "datacenters": [
+    {
+      "dataNodes": [
+        {
+          "disks": [
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk1"
+            },
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk2"
+            }
+          ],
+          "hardwareState": "AVAILABLE",
+          "hostname": "172.3.0.2",
+          "port": 6667
+        },
+        {
+          "disks": [
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk1"
+            },
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk2"
+            }
+          ],
+          "hardwareState": "AVAILABLE",
+          "hostname": "172.3.0.3",
+          "port": 6667
+        }
+      ,
+        {
+          "disks": [
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk1"
+            },
+            {
+              "capacityInBytes": 10737418240,
+              "hardwareState": "AVAILABLE",
+              "mountPath": "/data/ambry/data/disk2"
+            }
+          ],
+          "hardwareState": "AVAILABLE",
+          "hostname": "172.3.0.4",
+          "port": 6667
+        }
+      ],
+      "name": "lenovoImage"
+    }
+  ]
+}

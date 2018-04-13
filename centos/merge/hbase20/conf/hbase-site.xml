@@ -1,0 +1,64 @@
+<configuration>
+    <!-- the port and hostname should be identity to the fs.default.name in $HADOOP_HOME/conf/core-site.xml -->
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://hadoop-master:54310/hbase</value>
+    </property>
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.master</name>
+        <value>hbase-master:60000</value>
+    </property>
+    <property>
+        <name>hbase.master.port</name>
+        <value>60000</value>
+        <description>The port master should bind to.</description>
+    </property>
+    <!-- zookeeper cluster we setup in previous post -->
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>zk1,zk2,zk3</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/usr/local/hbase_zk_data</value>
+    </property>
+    <!-- 2 since we have 3 slaves for data -->
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>hbase.mob.file.cache.size</name>
+        <value>500</value>
+        <description>
+            Number of opened file handlers to cache.
+            A larger value will benefit reads by providing more file handlers per mob
+            file cache and would reduce frequent file opening and closing.
+            However, if this is set too high, this could lead to a "too many opened file handers"
+            The default value is 1000.
+        </description>
+    </property>
+    <property>
+        <name>hbase.mob.cache.evict.period</name>
+        <value>3600</value>
+        <description>
+            The amount of time in seconds after which an unused file is evicted from the
+            MOB cache. The default value is 3600 seconds.
+        </description>
+    </property>
+    <property>
+        <name>hbase.mob.cache.evict.remain.ratio</name>
+        <value>0.1f</value>
+        <description>
+            A multiplier (between 0.0 and 1.0), which determines how many files remain cached
+            after the threshold of files that remains cached after a cache eviction occurs
+            which is triggered by reaching the `hbase.mob.file.cache.size` threshold.
+            The default value is 0.5f, which means that half the files (the least-recently-used
+            ones) are evicted.
+        </description>
+    </property>
+</configuration>

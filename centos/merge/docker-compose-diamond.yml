@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  diamond-server:
+      image: 10.4.65.226/deeplearning/diamond-server:1.0.0
+      container_name: diamond-server
+      hostname: diamond-server
+      volumes:
+         - ./diamond/server/jdbc.properties:/home/admin/diamond_server/tomcat/deploy/diamond-server/WEB-INF/classes/jdbc.properties:ro
+         - ./diamond/hosts:/etc/hosts:ro
+      ports:
+        - "8080:8080"
+      entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/admin/diamond_server/tomcat/bin; sh startup.sh ; tail -f /dev/null"
+      networks:
+         hdpOverlay:
+            ipv4_address: 172.3.0.50
+
+  diamond-ops:
+      image: 10.4.65.226/deeplearning/diamond-ops:1.0.0
+      container_name: diamond-ops
+      hostname: diamond-ops
+      volumes:
+          - ./diamond/ops/jdbc.properties:/home/admin/diamond-ops/tomcat/deploy/diamond-ops/WEB-INF/classes/jdbc.properties:ro
+          - ./diamond/ops/env.properties:/home/admin/diamond-ops/tomcat/deploy/diamond-ops/WEB-INF/classes/env.properties:ro
+          - ./diamond/hosts:/etc/hosts:ro
+      ports:
+        - "8083:8080"
+      entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/admin/diamond-ops/tomcat/bin; sh startup.sh ; tail -f /dev/null"
+      depends_on:
+        - diamond-server
+      networks:
+        - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

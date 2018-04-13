@@ -1,0 +1,24 @@
+version: '2'
+services:
+    consul:
+        image: daocloud.io/library/consul:v0.6.4
+        hostname: "consul"
+        container_name: consul
+        ports:
+            - 8300:8300     # Server RPC, Server Use Only
+            - 8301:8301/tcp # Serf Gossip Protocol for LAN
+            - 8301:8301/udp # Serf Gossip Protocol for LAN
+            - 8302:8302/tcp
+            - 8302:8302/udp
+            - 8400:8400     # CLI RPC
+            - 8500:8500     # HTTP API & Web UI
+            - 8501:8501     # HTTPS API & Web UI
+            - 8600:53/tcp   # DNS Interface
+            - 8600:53/udp   # DNS Interface
+        command: agent -server -bootstrap -data-dir=/consul/data -client 0.0.0.0 -bind 0.0.0.0 -advertise 10.4.64.60 -node=consul
+        volumes:
+            - ./data:/consul/data:rw
+        environment:
+            SERVICE_NAME: consul
+        network_mode: host
+        restart: always

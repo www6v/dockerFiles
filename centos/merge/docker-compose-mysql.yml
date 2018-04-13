@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+    mysql:
+        container_name: mysql
+        hostname: mysql
+        image: 10.4.65.226/library/mysql:5.7.17
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./pipeline/mysql:/var/lib/mysql
+            - /etc/localtime:/etc/localtime:ro
+        environment:
+            - MYSQL_USER=azkaban
+            - MYSQL_PASSWORD=azkaban
+            - MYSQL_DATABASE=azkaban
+            - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

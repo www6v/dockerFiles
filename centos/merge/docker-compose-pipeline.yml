@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+    azk-slave1:
+       container_name: azk-slave1
+       hostname: azk-slave1
+       image: 10.4.65.226/deeplearning/azkaban-exec-img:ubt14-3.1.6
+       volumes:
+            - ./pipeline/azkaban-execserver/conf/:/usr/local/azkaban-exec-server/conf/
+            - ./pipeline/azkaban-execserver/bin/:/usr/local/azkaban-exec-server/bin/
+            - ./pipeline/algComp:/usr/local/algComp
+            - ./pipeline/workspace:/usr/local/workspace
+       entrypoint :
+            - "sh"
+            - "-c"
+            - "source /etc/profile; cd /usr/local/azkaban-exec-server; fromdos bin/*; bin/azkaban-executor-start.sh; tail -f /dev/null"
+       ports:
+            - '8551:8551'
+       networks:
+            - hdpOverlay
+
+    azk-slave2:
+       container_name: azk-slave2
+       hostname: azk-slave2
+       image: 10.4.65.226/deeplearning/azkaban-exec-img:ubt14-3.1.6
+       volumes:
+            - ./pipeline/azkaban-execserver/conf/:/usr/local/azkaban-exec-server/conf/
+            - ./pipeline/azkaban-execserver/bin/:/usr/local/azkaban-exec-server/bin/
+            - ./pipeline/algComp:/usr/local/algComp
+            - ./pipeline/workspace:/usr/local/workspace
+      entrypoint :
+            - "sh"
+            - "-c"
+            - "source /etc/profile; cd /usr/local/azkaban-exec-server; fromdos bin/*; bin/azkaban-executor-start.sh; tail -f /dev/null"
+       ports:
+            - '8552:8551'
+       networks:
+            - hdpOverlay
+
+    azk-master:
+       container_name: azk-master
+       hostname: azk-master
+       image: 10.4.65.226/deeplearning/azk-web:3.16.0
+       volumes:
+           - ./pipeline/azkaban-webserver/conf/:/usr/local/azkaban-web-server/conf/
+           - ./pipeline/azkaban-webserver/bin/:/usr/local/azkaban-web-server/bin/
+           - ./pipeline/azkaban-webserver/keystore:/usr/local/azkaban-web-server/keystore
+       ports:
+            - '8443:8443'
+            - '8081:8081'
+            - '8552:8551'
+       depends_on:
+            - azk-slave1
+            - azk-slave2
+       networks:
+            - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

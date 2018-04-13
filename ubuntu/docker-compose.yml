@@ -1,0 +1,54 @@
+version:'2'
+
+services:
+  dnsmasq:
+    container_name: dnsmasq
+    image: 10.4.65.226/library/dnsmasq:v1
+    hostname: dnsmasq.docker
+    volumes:
+      - ./data/dnsmasq.conf:/etc/dnsmasq.conf
+      - ./data/dnsmasq.d:/etc/dnsmasq.d
+    networks:
+      default:
+        ipv4_address: 172.18.1.1
+
+  hadoop-hbase-master1:
+     container_name: master1
+     image: 10.4.65.226/library/dnsmasq:v1
+     hostname: master1.docker
+     ports:
+       - "9000:9000"
+       - "50070:50070"
+       - "49100:22"
+     volumes:
+       - /root/deeplearning/hdp_conf:/usr/local/hadoop/etc/hadoop
+       - /root/deeplearning/dfs/namenode:/opt/hadoop/data/namenode
+     networks:
+        default:
+          ipv4_address: 172.18.1.10
+  hadoop-hbase-master12:
+     container_name: master12
+     image: 10.4.65.226/library/dnsmasq:v1
+     hostname: master12.docker
+     volumes:
+       - /root/deeplearning/hdp_conf:/usr/local/hadoop/etc/hadoop
+       - /root/deeplearning/dfs/namenode:/opt/hadoop/data/namenode
+     networks:
+        default:
+          ipv4_address: 172.18.1.11
+
+  hadoop-hbase-slave1:
+     volumes:
+       - /root/deeplearning/dfs/datanode1:/opt/hadoop/data/datanode
+  hadoop-hbase-slave2:
+
+  hadoop-hbase-slave3:
+
+networks:
+  hadoop:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+         - subnet: 172.18.0.0/16
+           gateway: 172.18.0.1

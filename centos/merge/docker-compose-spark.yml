@@ -1,0 +1,63 @@
+version: '2'
+services:
+    spark-master:
+        volumes:
+            - ./spark/master/logs:/usr/local/spark/logs:rw
+            - ./spark/master/data:/usr/local/spark/data:rw
+            - ./spark/conf:/usr/local/spark/conf:ro
+        image: 10.4.65.226/deeplearning/spark:std-2.1.0
+        container_name: spark-master
+        hostname: spark-master
+        ports:
+            - "8180:8080"
+            - "7077:7077"
+            - "6066:6066"
+        entrypoint:
+            - "sh"
+            - "-c"
+            - "source /etc/profile; /usr/sbin/sshd -D ; /usr/local/spark/sbin/start-all.sh"
+        networks:
+            - hdpOverlay
+
+    spark-slave1:
+        volumes:
+            - ./spark/slave1/logs:/usr/local/spark/logs:rw
+            - ./spark/slave1/data:/usr/local/spark/data:rw
+            - ./spark/conf:/usr/local/spark/conf:ro
+        image: 10.4.65.226/deeplearning/spark:std-2.1.0
+        hostname:  spark-slave1
+        container_name: spark-slave1
+        networks:
+            - hdpOverlay
+        links:
+            - spark-master
+
+    spark-slave2:
+        volumes:
+             - ./spark/slave2/logs:/usr/local/spark/logs:rw
+             - ./spark/slave2/data:/usr/local/spark/data:rw
+             - ./spark/conf:/usr/local/spark/conf:ro
+        image: 10.4.65.226/deeplearning/spark:std-2.1.0
+        hostname:  spark-slave2
+        container_name: spark-slave2
+        networks:
+             - hdpOverlay
+        links:
+            - spark-master
+
+    spark-slave3:
+        volumes:
+             - ./spark/slave3/logs:/usr/local/spark/logs:rw
+             - ./spark/slave3/data:/usr/local/spark/data:rw
+             - ./spark/conf:/usr/local/spark/conf:ro
+        image: 10.4.65.226/deeplearning/spark:std-2.1.0
+        hostname:  spark-slave3
+        container_name: spark-slave3
+        networks:
+            - hdpOverlay
+        links:
+            - spark-master
+
+networks:
+  hdpOverlay:
+    external: true

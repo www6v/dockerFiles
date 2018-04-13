@@ -1,0 +1,16 @@
+version: '2'
+services:
+  predictionio1:
+    image: 10.4.65.226/deeplearning/predictionio:0.11.1
+    networks:
+      - hdpOverlay
+    container_name: predictionio1
+    hostname: predictionio1
+    volumes:
+      - ./predictionIo/conf/pio-env.sh:/usr/local/PredictionIO/conf/pio-env.sh:ro
+    ports:
+      - 7070:7070
+
+networks:
+  hdpOverlay:
+    external: true

@@ -1,0 +1,38 @@
+version: '2'
+
+networks:
+  monitor-net:
+    driver: bridge
+
+
+services:
+  nodeexporter:
+    image: registry.cn-hangzhou.aliyuncs.com/slzcc/node-exporter
+    container_name: nodeexporter
+    restart: unless-stopped
+    expose:
+      - 9100
+     ports:
+      - 9100:9100
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  cadvisor:
+    image: registry.cn-hangzhou.aliyuncs.com/slzcc/cadvisor
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: unless-stopped
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"

@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+    mysql-replicator:
+        container_name: mysql-replicator
+        hostname: mysql-replicator
+        image: 10.4.65.226/deeplearning/replicator:1.0.0
+        volumes:
+             - ./replicator/rocketmq_mysql.conf:/home/rocketmq-mysql/conf/rocketmq_mysql.conf
+             - /etc/localtime:/etc/localtime:ro
+        entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/rocketmq-mysql/bin;./start.sh ; tail -f /dev/null"
+        networks:
+             - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

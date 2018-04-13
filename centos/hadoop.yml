@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  namenode:
+    build: ./namenode
+    image: h4dev/hadoop-namenode
+    environment:
+      - HADOOP_NAMENODE=hdfs://0.0.0.0:9000
+    volumes:
+      - namenode-data:/var/hdfs/namenode
+    networks:
+      hadoop:
+        ipv4_address: 172.16.240.10
+    extra_hosts:
+      - "namenode.docker-hadoop.net:172.16.240.10"
+      - "dn0.docker-hadoop.net:172.16.240.20"
+
+  datanode:
+    build: ./datanode
+    image: h4dev/hadoop-datanode
+    networks:
+      hadoop:
+        ipv4_address: 172.16.240.20
+    volumes:
+      - datanode-data:/data
+    environment:
+      - HADOOP_NAMENODE=hdfs://172.16.240.10:9000
+    extra_hosts:
+      - "namenode.docker-hadoop.net:172.16.240.10"
+      - "dn0.docker-hadoop.net:172.16.240.20"
+
+volumes:
+  namenode-data:
+    external: true
+  datanode-data:
+    external: true
+
+networks:
+  hadoop:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.240.0/24
+          gateway: 172.16.240.1

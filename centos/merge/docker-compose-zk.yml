@@ -1,0 +1,51 @@
+version: '2'
+
+services:
+  zoo1:
+     image: 10.4.65.226/library/zookeeper:3.4.8
+     restart: always
+     networks:
+          - hdpOverlay
+     container_name: zk1
+     volumes:
+        - ./zookeeper/zoo1:/opt/data
+        - ./zookeeper/conf:/opt/zookeeper/conf
+     ports:
+        - "12181:2181"
+        - "10026:22"
+     expose:
+        - "2888"
+        - "3888"
+  zoo2:
+     image: 10.4.65.226/library/zookeeper:3.4.8
+     restart: always
+     networks:
+          - hdpOverlay
+     container_name: zk2
+     volumes:
+           - ./zookeeper/zoo2:/opt/data
+           - ./zookeeper/conf:/opt/zookeeper/conf
+     ports:
+        - "12182:2181"
+        - "10027:22"
+     expose:
+        - "2888"
+        - "3888"
+  zoo3:
+     image: 10.4.65.226/library/zookeeper:3.4.8
+     restart: always
+     container_name: zk3
+     networks:
+        - hdpOverlay
+     volumes:
+          - ./zookeeper/zoo3:/opt/data
+          - ./zookeeper/conf:/opt/zookeeper/conf
+     ports:
+        - "12183:2181"
+        - "10028:22"
+     expose:
+        - "2888"
+        - "3888"
+networks:
+  hdpOverlay:
+    external: true

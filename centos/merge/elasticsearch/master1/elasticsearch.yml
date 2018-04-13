@@ -1,0 +1,55 @@
+node.master: true
+node.data: false
+
+#
+# Cluster Name
+#
+cluster.name: els-arcloud
+
+#
+# Node Name
+#
+node.name: els-master1
+
+#
+# Lock the memory on startup
+# Below is currently erroring in starting the node
+#
+#bootstrap.memory_lock: true
+
+#
+# bind to all ip addresses
+# TODO: gseng - change this in production
+#
+network.host: 0.0.0.0
+http.port: 9200
+
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+#
+discovery.zen.ping.unicast.hosts: [ "els-master1","els-master2"]
+
+#
+# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
+#
+discovery.zen.minimum_master_nodes: 1
+
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: /usr/share/elasticsearch/data
+#
+# Path to log files:
+#
+path.logs: /usr/share/elasticsearch/logs
+
+http.cors.enabled : true
+http.cors.allow-origin: "*"
+http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
+http.cors.allow-headers : "X-Requested-With,X-Auth-Token,Content-Type,  Content-Length, Authorization"

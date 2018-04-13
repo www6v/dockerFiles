@@ -1,0 +1,68 @@
+version: '2'
+
+services:
+
+  redis-admin:
+    image: actency/docker-phpredisadmin
+    container_name: redis-admin
+    hostname: redis-admin
+    ports:
+      - 9080:80
+    environment:
+      - REDIS_1_HOST=redis-master
+      - REDIS_1_PORT=7001
+      - REDIS_2_HOST=redis-master
+      - REDIS_2_PORT=7000
+      - REDIS_3_HOST=redis-slave
+      - REDIS_3_PORT=7003
+    networks:
+      - hdpOverlay
+
+  redis-sentinel1:
+      image: 10.4.65.226/deeplearning/redis-sentinel:3.2.9
+      container_name: redis-sentinel1
+      hostname: redis-sentinel1
+      ports:
+        - "26379:26379"
+      environment:
+        - SENTINEL_QUORUM=2
+        - SENTINEL_DOWN_AFTER=5000
+        - SENTINEL_FAILOVER=5000
+        - MASTER_HOST=redis-master
+        - MASTER_PORT=7000
+      networks:
+        - hdpOverlay
+
+  redis-sentinel2:
+      image: 10.4.65.226/deeplearning/redis-sentinel:3.2.9
+      container_name: redis-sentinel2
+      hostname: redis-sentinel2
+      ports:
+        - "26380:26379"
+      environment:
+        - SENTINEL_QUORUM=2
+        - SENTINEL_DOWN_AFTER=5000
+        - SENTINEL_FAILOVER=5000
+        - MASTER_HOST=redis-master
+        - MASTER_PORT=7001
+      networks:
+        - hdpOverlay
+
+  redis-sentinel3:
+      image: 10.4.65.226/deeplearning/redis-sentinel:3.2.9
+      container_name: redis-sentinel3
+      hostname: redis-sentinel3
+      ports:
+        - "26381:26379"
+      environment:
+        - SENTINEL_QUORUM=2
+        - SENTINEL_DOWN_AFTER=5000
+        - SENTINEL_FAILOVER=5000
+        - MASTER_HOST=redis-master
+        - MASTER_PORT=7002
+      networks:
+        - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

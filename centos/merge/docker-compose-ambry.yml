@@ -1,0 +1,101 @@
+version: '2'
+
+services:
+    ambry-dn1:
+       container_name: ambry-dn1
+       hostname: ambry-dn1
+       image: 10.4.65.226/deeplearning/ambry:1.0
+       volumes:
+           - ./ambry/data1/:/data/ambry/data/
+           - ./ambry/config-dn1/:/data/ambry/config
+           - /etc/localtime:/etc/localtime:ro
+           - ./ambry/hosts:/etc/hosts:ro
+       ports:
+           - '9008:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /data/ambry ; ./start-datanode.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.2
+
+    ambry-dn2:
+       container_name: ambry-dn2
+       hostname: ambry-dn2
+       image: 10.4.65.226/deeplearning/ambry:1.0
+       volumes:
+           - ./ambry/data2/:/data/ambry/data/
+           - ./ambry/config-dn2/:/data/ambry/config
+           - /etc/localtime:/etc/localtime:ro
+           - ./ambry/hosts:/etc/hosts:ro
+       ports:
+           - '9009:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /data/ambry ; ./start-datanode.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.3
+
+    ambry-dn3:
+       container_name: ambry-dn3
+       hostname: ambry-dn3
+       image: 10.4.65.226/deeplearning/ambry:1.0
+       volumes:
+           - ./ambry/data3/:/data/ambry/data/
+           - ./ambry/config-dn3/:/data/ambry/config
+           - /etc/localtime:/etc/localtime:ro
+           - ./ambry/hosts:/etc/hosts:ro
+       ports:
+           - '9010:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /data/ambry ; ./start-datanode.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.4
+
+    ambry-fe1:
+       container_name: ambry-fe1
+       hostname: ambry-fe1
+       image: 10.4.65.226/deeplearning/ambry:1.0
+       volumes:
+           - ./ambry/config-fe1/:/data/ambry/config
+           - /etc/localtime:/etc/localtime:ro
+           - ./ambry/hosts:/etc/hosts:ro
+       ports:
+           - '1174:1174'
+           - '9011:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /data/ambry ; ./start-frontend.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.5
+
+    ambry-fe2:
+       container_name: ambry-fe2
+       hostname: ambry-fe2
+       image: 10.4.65.226/deeplearning/ambry:1.0
+       volumes:
+           - ./ambry/config-fe2/:/data/ambry/config
+           - /etc/localtime:/etc/localtime:ro
+           - ./ambry/hosts:/etc/hosts:ro
+       ports:
+           - '1175:1174'
+           - '9012:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /data/ambry ; ./start-frontend.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.6
+
+networks:
+  hdpOverlay:
+    external: true

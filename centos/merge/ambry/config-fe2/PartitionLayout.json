@@ -1,0 +1,50 @@
+{
+  "clusterName": "lenovo_image_nodes",
+  "version": 1,
+  "partitions": [
+    {
+      "id": 0,
+      "partitionState": "READ_WRITE",
+      "replicaCapacityInBytes": 1073741824,
+      "replicas": [
+        {
+          "hostname": "172.3.0.2",
+          "mountPath": "/data/ambry/data/disk1",
+          "port": 6667
+        },
+        {
+          "hostname": "172.3.0.3",
+          "mountPath": "/data/ambry/data/disk1",
+          "port": 6667
+        },
+        {
+          "hostname": "172.3.0.4",
+          "mountPath": "/data/ambry/data/disk1",
+          "port": 6667
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "partitionState": "READ_WRITE",
+      "replicaCapacityInBytes": 1073741824,
+      "replicas": [
+        {
+          "hostname": "172.3.0.2",
+          "mountPath": "/data/ambry/data/disk2",
+          "port": 6667
+        },
+        {
+          "hostname": "172.3.0.3",
+          "mountPath": "/data/ambry/data/disk2",
+          "port": 6667
+        },
+        {
+          "hostname": "172.3.0.4",
+          "mountPath": "/data/ambry/data/disk2",
+          "port": 6667
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+version: '2'
+
+services:
+  hbase-slave1:
+     image: 10.4.65.226/deeplearning/hbase:1.2.4
+     container_name: hbase-slave1
+     hostname: hbase-slave1
+     volumes:
+       - ./hbase/conf:/usr/local/hbase/conf
+       - ./hbase/slave/zkdata1:/usr/local/hbase_zk_data
+       - /etc/localtime:/etc/localtime:ro
+       - ./hbase/hosts:/etc/hosts
+     networks:
+        hdpOverlay:
+          ipv4_address: 172.3.0.101
+     ports:
+        - "10035:22"
+        - "16030:16030"
+  hbase-slave2:
+       image: 10.4.65.226/deeplearning/hbase:1.2.4
+       container_name: hbase-slave2
+       hostname: hbase-slave2
+       volumes:
+         - ./hbase/conf:/usr/local/hbase/conf
+         - ./hbase/slave/zkdata2:/usr/local/hbase_zk_data
+         - /etc/localtime:/etc/localtime:ro
+         - ./hbase/hosts:/etc/hosts
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.102
+       ports:
+          - "10034:22"
+          - "16031:16030"
+  hbase-slave3:
+       image: 10.4.65.226/deeplearning/hbase:1.2.4
+       container_name: hbase-slave3
+       hostname: hbase-slave3
+       volumes:
+         - ./hbase/conf:/usr/local/hbase/conf
+         - ./hbase/slave/zkdata3:/usr/local/hbase_zk_data
+         - /etc/localtime:/etc/localtime:ro
+         - ./hbase/hosts:/etc/hosts
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.103
+       ports:
+          - "10033:22"
+          - "16032:16030"
+  hbase-master:
+       image: 10.4.65.226/deeplearning/hbase:1.2.4
+       container_name: hbase-master
+       hostname: hbase-master
+       volumes:
+         - ./hbase/conf:/usr/local/hbase/conf
+         - ./hbase/master/zkdata:/usr/local/hbase_zk_data
+         - /etc/localtime:/etc/localtime:ro
+         - ./hbase/hosts:/etc/hosts
+       networks:
+          hdpOverlay:
+             ipv4_address: 172.3.0.100
+       ports:
+          - "10032:22"
+          - "16010:16010"
+networks:
+  hdpOverlay:
+    external: true

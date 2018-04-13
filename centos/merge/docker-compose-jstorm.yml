@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+    nimbus:
+        image: 10.4.65.226/deeplearning/jstorm-zlc:2.2.1
+        container_name: nimbus
+        entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; service ssh restart ; jstorm nimbus; tail -f /dev/null"
+        volumes:
+            - ./jstorm/conf/storm.yaml:/opt/jstorm/conf/storm.yaml
+            - /etc/localtime:/etc/localtime:ro
+        restart: always
+        ports:
+            - 6627:6627
+            - 1052:22
+        networks:
+            - hdpOverlay
+
+    supervisor:
+        image: 10.4.65.226/deeplearning/jstorm-zlc:2.2.1
+        container_name: supervisor
+        entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; service ssh restart ; jstjstorm supervisor; tail -f /dev/null"
+        volumes:
+            - ./jstorm/conf/storm.yaml:/opt/jstorm/conf/storm.yaml
+            - /etc/localtime:/etc/localtime:ro
+        depends_on:
+            - nimbus
+        restart: always
+        ports:
+            - 1053:22
+        networks:
+            - hdpOverlay
+
+    jstorm-ui:
+        image: 10.4.65.226/deeplearning/jstorm-ui:2.2.1
+        container_name: jstorm-ui
+        volumes:
+            - ./jstorm/conf/storm.yaml:/opt/jstorm/conf/storm.yaml
+            - /etc/localtime:/etc/localtime:ro
+        depends_on:
+            - nimbus
+            - supervisor
+        ports:
+            - 28080:8080
+        restart: always
+        networks:
+            - hdpOverlay
+
+networks:
+  hdpOverlay:
+    external: true

@@ -1,0 +1,69 @@
+version: '2'
+
+services:
+    recog-dn1:
+       container_name: recog-dn1
+       hostname: recog-dn1
+       image: 10.4.65.226/deeplearning/ar-recog:1.0
+       volumes:
+           - ./ar-recog/targets/:/home/targets/
+           - ./ar-recog/bin:/home/ar-recog/bin
+           - ./ar-recog/native:/home/ar-recog/native
+           - ./ar-recog/config-dn1/server.properties:/home/ar-recog/conf/server.properties
+           - /etc/localtime:/etc/localtime:ro
+           - ./ar-recog/hosts:/etc/hosts:ro
+       ports:
+           - '9107:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/ar-recog/bin ; chmod +x *; ./start-datanode.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.110
+
+    recog-dn2:
+       container_name: recog-dn2
+       hostname: recog-dn2
+       image: 10.4.65.226/deeplearning/ar-recog:1.0
+       volumes:
+           - ./ar-recog/targets/:/home/targets/
+           - ./ar-recog/bin:/home/ar-recog/bin
+           - ./ar-recog/native:/home/ar-recog/native
+           - ./ar-recog/config-dn2/server.properties:/home/ar-recog/conf/server.properties
+           - /etc/localtime:/etc/localtime:ro
+           - ./ar-recog/hosts:/etc/hosts:ro
+       ports:
+           - '9109:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/ar-recog/bin ; ./start-datanode.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.113
+
+    recog-fe1:
+       container_name: recog-fe1
+       hostname: recog-fe1
+       image: 10.4.65.226/deeplearning/ar-recog:1.0
+       volumes:
+           - ./ar-recog/targets/:/home/targets/
+           - ./ar-recog/bin:/home/ar-recog/bin
+           - ./ar-recog/config-fe1/frontend.properties:/home/ar-recog/conf/frontend.properties
+           - /etc/localtime:/etc/localtime:ro
+           - ./ar-recog/hosts:/etc/hosts:ro
+       ports:
+           - '1178:1174'
+           - '9108:9008'
+       entrypoint :
+             - "sh"
+             - "-c"
+             - "source /etc/profile; cd /home/ar-recog/bin ; ./start-frontend.sh start; tail -f /dev/null"
+       networks:
+          hdpOverlay:
+            ipv4_address: 172.3.0.112
+
+networks:
+  hdpOverlay:
+    external: true
