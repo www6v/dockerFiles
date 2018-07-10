@@ -5,7 +5,7 @@
 
 大数据系统:hadoop，hbase，jstorm
 
-图形系统：colmap，opencv
+图形系统：colmap，opencv,eigen
 
 
 安装时的问题
