@@ -7,6 +7,7 @@
 
 图形系统：colmap，opencv
 
+
 安装时的问题
 
 1. elasticsearch 运行时问题
