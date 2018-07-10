@@ -1,11 +1,13 @@
 # docker-compose  files
-各种系统的docker-compose文件， 包括以下三大系统： 
+以下三类系统的docker-compose文件， 包括： 
 
 中间件系统: ambry，diamond，elasticsearch，monitor（prometheus），rocketmq，azkaban，redis，spark，zookeeper
 
 大数据系统:hadoop，hbase，jstorm
 
 图形系统：colmap，opencv
+
+安装时的问题
 
 1. elasticsearch 运行时问题
 
