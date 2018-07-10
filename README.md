@@ -8,3 +8,4 @@ max virtual memory areas vm.max_map_count [65530] is too low, increase to at lea
 配置宿主机的vm.max_map_count解决这个问题
 
 2. 10.4.65.226/deeplearning/es-head docker image 是从github里elasticsearch-head 5.0版本的源代码里docker build出来的，源代码里自带Dockerfile。
+源代码里要修改app.js，Gruntfile.js
