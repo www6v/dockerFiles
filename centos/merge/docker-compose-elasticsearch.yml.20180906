@@ -1,0 +1,91 @@
+version: '2'
+services:
+  els-master1:
+    image: 10.4.65.226/deeplearning/elasticsearch:5.2.2
+    networks:
+      - hdpOverlay
+    container_name: els-master1
+    hostname: els-master1
+    volumes:
+      - ./elasticsearch/master1/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elasticsearch/master1/data:/usr/share/elasticsearch/data      
+      - /home/wei/workspace/jniReco:/home/wei/workspace/jniReco      
+    environment:
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m  -Djava.library.path=/home/wei/workspace/jniReco            
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wei/workspace/jniReco/lib/    
+      - LIBRARY_PATH=$LIBRARY_PATH:/home/wei/workspace/jniReco/lib/ 
+    ports:
+      - 9201:9200
+      - 9301:9300
+
+  els-master2:
+    image: 10.4.65.226/deeplearning/elasticsearch:5.2.2
+    networks:
+      - hdpOverlay
+    container_name: els-master2
+    hostname: els-master2
+    volumes:
+      - ./elasticsearch/master2/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elasticsearch/master2/data:/usr/share/elasticsearch/data
+      - /home/wei/workspace/jniReco:/home/wei/workspace/jniReco      
+    environment:
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m  -Djava.library.path=/home/wei/workspace/jniReco
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wei/workspace/jniReco/lib/    
+      - LIBRARY_PATH=$LIBRARY_PATH:/home/wei/workspace/jniReco/lib/       
+    ports:
+      - 9204:9200
+      - 9304:9300
+
+  els-slave1:
+    image: 10.4.65.226/deeplearning/elasticsearch:5.2.2
+    networks:
+      - hdpOverlay
+    container_name: els-slave1
+    hostname: els-slave1
+    volumes:
+      - ./elasticsearch/slave1/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elasticsearch/slave1/data:/usr/share/elasticsearch/data
+      - /home/wei/workspace/jniReco:/home/wei/workspace/jniReco      
+    environment:
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m  -Djava.library.path=/home/wei/workspace/jniReco
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wei/workspace/jniReco/lib/    
+      - LIBRARY_PATH=$LIBRARY_PATH:/home/wei/workspace/jniReco/lib/       
+    ports:
+      - 9202:9200
+      - 9302:9300
+
+  els-slave2:
+    image: 10.4.65.226/deeplearning/elasticsearch:5.2.2
+    networks:
+      - hdpOverlay
+    container_name: els-slave2
+    hostname: els-slave2
+    volumes:
+      - ./elasticsearch/slave2/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elasticsearch/slave2/data:/usr/share/elasticsearch/data
+      - /home/wei/workspace/jniReco:/home/wei/workspace/jniReco      
+    environment:
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m  -Djava.library.path=/home/wei/workspace/jniReco
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wei/workspace/jniReco/lib/    
+      - LIBRARY_PATH=$LIBRARY_PATH:/home/wei/workspace/jniReco/lib/       
+    ports:
+      - 9203:9200
+      - 9303:9300
+
+  els-head:
+    image: 10.4.65.226/deeplearning/es-head:1.0
+    networks:
+       - hdpOverlay
+    container_name: els-head
+    hostname: els-head
+    ports:
+      - 9102:9100
+    links:
+      - els-master1
+      - els-master2
+      - els-slave1
+      - els-slave2
+
+networks:
+  hdpOverlay:
+    external: true
