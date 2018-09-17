@@ -3,8 +3,9 @@
 # desc : 安装spark
 ############################################
 # 设置继承自centos ssh ,java版本镜像
-FROM 10.4.65.226/linux/centos:ssh-7
-
+FROM  ubuntu:16.04
+ 
+ 
 # 下面是一些创建者的基本信息
 MAINTAINER wangwei (www6v@126.com)
 
@@ -12,8 +13,24 @@ MAINTAINER wangwei (www6v@126.com)
 ENV ELS_VERSION 5.2.2
 
 #安装scala
+RUN apt-get update
+RUN apt-get -y install wget 
 RUN wget http://10.4.65.35:8080/hdpSoftware/elasticsearch-$ELS_VERSION.tar.gz && mv  elasticsearch-$ELS_VERSION.tar.gz /usr/share
 RUN cd /usr/share && tar -zxvf elasticsearch-$ELS_VERSION.tar.gz && ln -s ./elasticsearch-$ELS_VERSION elasticsearch && rm -rf  elasticsearch-$ELS_VERSION.tar.gz
+
+# photo lib
+RUN sed -i 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/mirrors\.163\.com\/ubuntu\//g' /etc/apt/sources.list 
+RUN apt-get update && apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler libgflags-dev libgoogle-glog-dev liblmdb-dev libatlas-base-dev libboost-all-dev
+
+# java
+#RUN  add-apt-repository ppa:openjdk/ppa
+#RUN  add-apt-repository ppa:openjdk-r/ppa
+RUN  apt-get update
+RUN  apt-get -y install openjdk-8-jdk
+RUN  apt-get -y install openjdk-8-jre 
+#RUN  apt-get -y install openjdk-8-jre openjdk-8-jdk-headlesss
+#RUN  update-alternatives -config java
+#RUN  update-alternatives -config javac
 
 ENV ES_HOME /usr/share/elasticsearch
 RUN groupadd es \
@@ -33,7 +50,10 @@ RUN set -ex \
      done
 
 #环境变量
-RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ 
+#RUN mkdir /etc/localtime
+RUN mkdir /etc/ssh &&  touch /etc/ssh/ssh_config
+#RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo "export ES_HOME=$ES_HOME" >> /etc/profile && \
     echo "export PATH=\$PATH:\$ES_HOME/bin" >> /etc/profile && \
     echo "BatchMode yes" >>  /etc/ssh/ssh_config && \

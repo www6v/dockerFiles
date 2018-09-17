@@ -17,6 +17,8 @@ node.name: els-master1
 #
 #bootstrap.memory_lock: true
 
+
+
 #
 # bind to all ip addresses
 # TODO: gseng - change this in production
