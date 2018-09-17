@@ -8,8 +8,7 @@ FROM 10.4.65.226/linux/centos:ssh-7
 # 下面是一些创建者的基本信息
 MAINTAINER wangwei (www6v@126.com)
 
-#ZK的版本信息
-ENV ZK_VERSION 3.4.8
+#ZK的版本信�?ENV ZK_VERSION 3.4.8
 
 #安装ZK
 RUN wget http://10.4.65.35:8080/hdpSoftware/zookeeper-$ZK_VERSION.tar.gz && mv zookeeper-$ZK_VERSION.tar.gz /opt
